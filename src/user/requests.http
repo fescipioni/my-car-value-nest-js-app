@@ -3,9 +3,25 @@ POST http://localhost:3000/auth/sign-up
 Content-Type: application/json
 
 {
-  "email": "test@test.com",
+  "email": "test-2@test.com",
   "password": "test"
 }
+
+### Login a user
+POST http://localhost:3000/auth/sign-in
+Content-Type: application/json
+
+{
+  "email": "test-2@test.com",
+  "password": "test"
+}
+
+### Get the currently signed in user
+
+GET http://localhost:3000/auth/who-am-i
+
+### Sign out
+POST http://localhost:3000/auth/sign-out
 
 ### Find a particular User with a given Id
 

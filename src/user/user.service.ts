@@ -17,6 +17,8 @@ export class UserService {
   }
 
   findOne(id: number) {
+    if (!id) return null;
+    
     return this.repository.findOneBy({id});
   }
 
