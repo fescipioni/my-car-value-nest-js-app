@@ -8,7 +8,6 @@ import { UserModule } from './user/user.module';
 import { ReportModule } from './report/report.module';
 import { User } from './user/user.entity';
 import { Report } from './report/report.entity';
-import { config } from 'process';
 
 const cookieSession = require('cookie-session');
 
@@ -20,17 +19,18 @@ const cookieSession = require('cookie-session');
     }),
     UserModule, 
     ReportModule, 
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        return {
-          type: 'sqlite',
-          database: config.get<string>('DB_NAME'),
-          synchronize: true,
-          entities: [User, Report]
-        }
-      }
-    })
+    TypeOrmModule.forRoot(),
+    // TypeOrmModule.forRootAsync({
+    //   inject: [ConfigService],
+    //   useFactory: (config: ConfigService) => {
+    //     return {
+    //       type: 'sqlite',
+    //       database: config.get<string>('DB_NAME'),
+    //       synchronize: true,
+    //       entities: [User, Report]
+    //     }
+    //   }
+    // })
     // TypeOrmModule.forRoot({
     //   type: 'sqlite',
     //   database: 'db.sqlite',
@@ -51,9 +51,11 @@ const cookieSession = require('cookie-session');
 })
 
 export class AppModule {
+  constructor(private configService: ConfigService) {}
+
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(cookieSession({
-      keys: ['123456789asdfghjkl']
+      keys: [this.configService.get('COOKIE_KEY')]
     })).forRoutes('*');
   }
 }
